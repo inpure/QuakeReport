@@ -20,9 +20,10 @@ public class MainActivity extends AppCompatActivity {
         earthquake.add("London");
         earthquake.add("Tokyo");
 
-        //配置 ListView ,显示earthquake列表
-        ListView earthquakeListView = findViewById(R.id.list);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, earthquake);
+
+        //获得一个ListView的引用，并为其配置adapter
+        ListView earthquakeListView = findViewById(R.id.list);
         earthquakeListView.setAdapter(adapter);
     }
 }
