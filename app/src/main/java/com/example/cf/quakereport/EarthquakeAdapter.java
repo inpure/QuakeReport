@@ -27,24 +27,33 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
      * @param position 在 list item 中显示的数据在 list 中的位置
      * @param convertView 填充的回收视图
      * @param parent 用于加载的父 ViewGroup
-     * @return
+     * @return 返回AdapterView中的位置视图
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        // 检查 view 是否被重用，否则加载一个
         View listItemView = convertView;
         if (listItemView == null) {
             listItemView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
         }
+
+        // 获得列表中当前位置的对象{@link Earthquake}
         Earthquake currentEarthquake = getItem(position);
+
+        // 获得显示震级的 TextView 并设置
         TextView magText = listItemView.findViewById(R.id.mag_text_view);
         magText.setText("" + currentEarthquake.getMag());
 
+        // 获得显示地点的 TextView 并设置
         TextView placeText = listItemView.findViewById(R.id.place_text_view);
         placeText.setText(currentEarthquake.getPlace());
 
+        // 获得显示时间的 TextView 并设置
         TextView timeText = listItemView.findViewById(R.id.time_text_view);
         timeText.setText(currentEarthquake.getTime());
 
+        // 返回整个 list item 布局（包括3个 TextView）
+        // 显示在 ListView 中
         return listItemView;
     }
 
