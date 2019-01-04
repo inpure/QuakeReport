@@ -15,14 +15,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_earthquake);
 
         //创建伪地震列表
-        ArrayList<String> earthquake = new ArrayList<>();
-        earthquake.add("San francisco");
-        earthquake.add("London");
-        earthquake.add("Tokyo");
+        ArrayList<Earthquake> earthquake = new ArrayList<>();
+        earthquake.add(new Earthquake(7.2, "San francisco", "Feb 2,2016"));
+        earthquake.add(new Earthquake(6.1, "London", "July 20,2015"));
+        earthquake.add(new Earthquake(3.9, "Tokyo", "Nov 10,2014"));
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, earthquake);
+        EarthquakeAdapter adapter = new EarthquakeAdapter(this,  earthquake);
 
-        //获得一个ListView的引用，并为其配置adapter
+        //获得一个 ListView 的引用，并为其配置 adapter
         ListView earthquakeListView = findViewById(R.id.list);
         earthquakeListView.setAdapter(adapter);
     }
