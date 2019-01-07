@@ -7,7 +7,7 @@ package com.example.cf.quakereport;
  * 功能描述：{@link Earthquake}用于表示地震信息
  */
 public class Earthquake {
-    private double mMag;
+    private String mMag;
     private String mPlace;
     private String mTime;
 
@@ -16,7 +16,7 @@ public class Earthquake {
      * @param place 地点
      * @param time  时间
      */
-    public Earthquake(double mag, String place, String time) {
+    public Earthquake(String mag, String place, String time) {
         mMag = mag;
         mPlace = place;
         mTime = time;
@@ -25,7 +25,7 @@ public class Earthquake {
     /**
      * @return 返回震级
      */
-    public double getMag() {
+    public String getMag() {
         return mMag;
     }
 

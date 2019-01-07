@@ -42,7 +42,7 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
 
         // 获得显示震级的 TextView 并设置
         TextView magText = listItemView.findViewById(R.id.mag_text_view);
-        magText.setText("" + currentEarthquake.getMag());
+        magText.setText(currentEarthquake.getMag());
 
         // 获得显示地点的 TextView 并设置
         TextView placeText = listItemView.findViewById(R.id.place_text_view);
