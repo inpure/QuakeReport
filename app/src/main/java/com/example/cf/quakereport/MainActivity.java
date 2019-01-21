@@ -1,10 +1,14 @@
 package com.example.cf.quakereport;
 
-import android.os.AsyncTask;
+import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import org.json.JSONArray;
@@ -21,7 +25,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<Earthquake>> {
 
     private static final String USGS_REQUEST_URL =
             "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2016-01-01&endtime=2016-05-02&minfelt=50&minmagnitude=5";
@@ -30,13 +34,44 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_earthquake);
-        new EarthquakeTask().execute(USGS_REQUEST_URL);
+        getSupportLoaderManager().initLoader(0, null, this).forceLoad();
     }
 
-    private class EarthquakeTask extends AsyncTask<String, Void, ArrayList<Earthquake>> {
+    @NonNull
+    @Override
+    public Loader<ArrayList<Earthquake>> onCreateLoader(int i, @Nullable Bundle bundle) {
+        return new EarthquakeLoader(MainActivity.this);
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<ArrayList<Earthquake>> loader, ArrayList<Earthquake> earthquakes) {
+        // 创建一个 Earthquake 列表的适配器 EarthquakeAdaper
+        // 用它为每个列表项创建列表项视图
+        EarthquakeAdapter adapter = new EarthquakeAdapter(MainActivity.this, earthquakes);
+
+        // 获得一个 ListView 的引用，并为其配置 adapter
+        ListView earthquakeListView = findViewById(R.id.list);
+        earthquakeListView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<ArrayList<Earthquake>> loader) {
+        EarthquakeAdapter adapter = new EarthquakeAdapter(MainActivity.this, new ArrayList<Earthquake>());
+
+        // 获得一个 ListView 的引用，并为其配置 adapter
+        ListView earthquakeListView = findViewById(R.id.list);
+        earthquakeListView.setAdapter(adapter);
+    }
+
+    private static class EarthquakeLoader extends AsyncTaskLoader<ArrayList<Earthquake>> {
+        public EarthquakeLoader(@NonNull Context context) {
+            super(context);
+        }
+
+        @Nullable
         @Override
-        protected ArrayList<Earthquake> doInBackground(String... strings) {
-            URL url = createUrl(strings[0]);
+        public ArrayList<Earthquake> loadInBackground() {
+            URL url = createUrl(USGS_REQUEST_URL);
             String jsonResponse = "";
             try {
                 jsonResponse = makeHttpRequest(url);
@@ -47,21 +82,6 @@ public class MainActivity extends AppCompatActivity {
             return earthquakes;
         }
 
-        @Override
-        protected void onPostExecute(ArrayList<Earthquake> earthquakes) {
-            super.onPostExecute(earthquakes);
-            // 创建一个 Earthquake 列表的适配器 EarthquakeAdaper
-            // 用它为每个列表项创建列表项视图
-            EarthquakeAdapter adapter = new EarthquakeAdapter(MainActivity.this, earthquakes);
-
-            // 获得一个 ListView 的引用，并为其配置 adapter
-            ListView earthquakeListView = findViewById(R.id.list);
-            earthquakeListView.setAdapter(adapter);
-        }
-        /**
-         * @param stringUrl 需要转换为URL的String对象
-         * @return 返回新的URL对象
-         */
         private URL createUrl(String stringUrl) {
             URL url = null;
             try {
