@@ -35,7 +35,7 @@ public final class QueryUtils {
     /**
      * 将stringUrl转换成URI对象
      */
-    public static URL createUrl(String stringUrl) {
+    private static URL createUrl(String stringUrl) {
         URL url = null;
         try {
             url = new URL(stringUrl);
@@ -102,8 +102,6 @@ public final class QueryUtils {
         // Create an empty ArrayList that we can start adding earthquakes to
         ArrayList<Earthquake> earthquakes = new ArrayList<>();
 
-        // Try to parse the SAMPLE_JSON_RESPONSE. If there's a problem with the way the JSON
-        // is formatted, a JSONException exception object will be thrown.
         // Catch the exception so the app doesn't crash, and print the error message to the logs.
         try {
             // TODO: Parse the response given by the SAMPLE_JSON_RESPONSE string and
@@ -119,8 +117,6 @@ public final class QueryUtils {
                 Long TimeInMilliseconds = properties.getLong("time");
                 earthquakes.add(new Earthquake(magnitude, Location, TimeInMilliseconds));
             }
-
-
         } catch (JSONException e) {
             // If an error is thrown when executing any of the above statements in the "try" block,
             // catch the exception here, so the app doesn't crash. Print a log message

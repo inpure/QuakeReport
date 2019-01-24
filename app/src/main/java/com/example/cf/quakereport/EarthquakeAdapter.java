@@ -1,6 +1,8 @@
 package com.example.cf.quakereport;
 
 import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,18 +49,66 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
         Double mag = currentEarthquake.getMag();
         magText.setText(formatMagnitude(mag));
 
+        //根据震级显示 TextView 背景颜色
+        GradientDrawable magCircle =(GradientDrawable) magText.getBackground();
+        int magCircleColor = getMagColor(mag);
+        magCircle.setColor(magCircleColor);
+
         // 获得显示地点的 TextView 并设置
         TextView placeText = listItemView.findViewById(R.id.place_text_view);
         placeText.setText(currentEarthquake.getLocation());
 
-        // 获得显示时间的 TextView 并设置
-        TextView timeText = listItemView.findViewById(R.id.time_text_view);
+        // 获得显示日期的 TextView 并设置
+        TextView dateText = listItemView.findViewById(R.id.date_text_view);
         Date date = new Date(currentEarthquake.getTime());
-        timeText.setText(formatDate(date));
+        dateText.setText(formatDate(date));
+
+        //获得显示时间的 TextView 并设置
+        TextView timeText = listItemView.findViewById(R.id.time_text_view);
+        timeText.setText(formatTime(date));
 
         // 返回整个 list item 布局（包括3个 TextView）
         // 显示在 ListView 中
         return listItemView;
+    }
+
+    private int getMagColor(double mag) {
+        int magColorId;
+        int magFloor = (int) Math.floor(mag);
+        switch (magFloor) {
+            case 0:
+            case 1:
+                magColorId = R.color.magnitude1;
+                break;
+            case 2:
+                magColorId = R.color.magnitude2;
+                break;
+            case 3:
+                magColorId = R.color.magnitude3;
+                break;
+            case 4:
+                magColorId = R.color.magnitude4;
+                break;
+            case 5:
+                magColorId = R.color.magnitude5;
+                break;
+            case 6:
+                magColorId = R.color.magnitude6;
+                break;
+            case 7:
+                magColorId = R.color.magnitude7;
+                break;
+            case 8:
+                magColorId = R.color.magnitude8;
+                break;
+            case 9:
+                magColorId = R.color.magnitude9;
+                break;
+            default:
+                magColorId = R.color.magnitude10plus;
+                break;
+        }
+        return ContextCompat.getColor(getContext(),magColorId);
     }
 
     /**
@@ -71,10 +121,18 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
     }
 
     /**
-     * @return 格式化的日期字符串
+     * @return 从 Date 对象返回格式化的日期字符串即 (i.e. "Mar 3, 1984")。
      */
     private String formatDate(Date date) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("LLL dd, yyy");
         return dateFormat.format(date);
+    }
+
+    /**
+     * @return 从 Date 对象返回格式化的时间字符串即 (i.e. "4:30 PM")。
+     */
+    private String formatTime(Date date) {
+        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
+        return timeFormat.format(date);
     }
 }
