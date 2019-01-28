@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * 功能描述：
  */
 public class EarthquakeLoader extends AsyncTaskLoader<ArrayList<Earthquake>> {
-    private String mSTringUrl;
+    private String mStringUrl;
 
     @Override
     protected void onStartLoading() {
@@ -24,13 +24,13 @@ public class EarthquakeLoader extends AsyncTaskLoader<ArrayList<Earthquake>> {
 
     public EarthquakeLoader(@NonNull Context context, String stringUrl) {
         super(context);
-        mSTringUrl = stringUrl;
+        mStringUrl = stringUrl;
     }
 
     @Nullable
     @Override
     public ArrayList<Earthquake> loadInBackground() {
-        ArrayList<Earthquake> earthquakes = QueryUtils.fetchEarthquakeData(mSTringUrl);
+        ArrayList<Earthquake> earthquakes = QueryUtils.fetchEarthquakeData(mStringUrl);
         return earthquakes;
     }
 }
