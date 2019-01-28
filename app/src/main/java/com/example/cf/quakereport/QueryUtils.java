@@ -26,6 +26,11 @@ import java.util.ArrayList;
 public final class QueryUtils {
 
     /**
+     * 标记日志消息
+     */
+    private final static String LOG_TAG = QueryUtils.class.getSimpleName();
+
+    /**
      * 创建一个私有构造函数，因为不需要创建{@link QueryUtils}对象。
      * 这个类只是为了保存静态变量和方法，可以直接从类名QueryUtils访问（并且不需要QueryUtils的对象实例））。
      */
@@ -40,8 +45,7 @@ public final class QueryUtils {
         try {
             url = new URL(stringUrl);
         } catch (MalformedURLException e) {
-            e.printStackTrace();
-            return null;
+            Log.e(LOG_TAG, "Problem building the URL",e);
         }
         return url;
     }

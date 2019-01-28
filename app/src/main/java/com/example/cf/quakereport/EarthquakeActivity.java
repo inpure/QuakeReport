@@ -13,38 +13,42 @@ import java.util.ArrayList;
 public class EarthquakeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<Earthquake>> {
 
     public static final String USGS_REQUEST_URL =
-            "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&limit=20&minmagnitude=1";
+            "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&minmagnitude=1&limit=10";
+
+    private EarthquakeAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_earthquake);
-        getSupportLoaderManager().initLoader(0, null, this).forceLoad();
+        // 获得一个 ListView 的引用，并为其配置 adapter
+        ListView earthquakeListView = findViewById(R.id.list);
+        mAdapter = new EarthquakeAdapter(this, new ArrayList<Earthquake>());
+        earthquakeListView.setAdapter(mAdapter);
+        LoaderManager loaderManager =  LoaderManager.getInstance(this);
+        loaderManager.initLoader(0, null, this);
     }
 
     @NonNull
     @Override
     public Loader<ArrayList<Earthquake>> onCreateLoader(int i, @Nullable Bundle bundle) {
-        return new EarthquakeLoader(EarthquakeActivity.this);
+        return new EarthquakeLoader(EarthquakeActivity.this, USGS_REQUEST_URL);
     }
 
     @Override
     public void onLoadFinished(@NonNull Loader<ArrayList<Earthquake>> loader, ArrayList<Earthquake> earthquakes) {
-        // 创建一个 Earthquake 列表的适配器 EarthquakeAdaper
-        // 用它为每个列表项创建列表项视图
-        EarthquakeAdapter adapter = new EarthquakeAdapter(EarthquakeActivity.this, earthquakes);
-
-        // 获得一个 ListView 的引用，并为其配置 adapter
-        ListView earthquakeListView = findViewById(R.id.list);
-        earthquakeListView.setAdapter(adapter);
+        //清空适配器里的 earthquake 数据
+        mAdapter.clear();
+        //如果有有效的 Earthquake 列表，则将他们添加到适配器
+        //这将触发 ListView 更新
+        if (earthquakes != null && !earthquakes.isEmpty()) {
+            mAdapter.addAll(earthquakes);
+        }
     }
 
     @Override
     public void onLoaderReset(@NonNull Loader<ArrayList<Earthquake>> loader) {
-        EarthquakeAdapter adapter = new EarthquakeAdapter(EarthquakeActivity.this, new ArrayList<Earthquake>());
-
-        // 获得一个 ListView 的引用，并为其配置 adapter
-        ListView earthquakeListView = findViewById(R.id.list);
-        earthquakeListView.setAdapter(adapter);
+        //清空数据
+       mAdapter.clear();
     }
 }

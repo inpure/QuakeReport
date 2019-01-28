@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.AsyncTaskLoader;
+
 import java.util.ArrayList;
 
 /**
@@ -13,14 +14,23 @@ import java.util.ArrayList;
  * 功能描述：
  */
 public class EarthquakeLoader extends AsyncTaskLoader<ArrayList<Earthquake>> {
-    public EarthquakeLoader(@NonNull Context context) {
+    private String mSTringUrl;
+
+    @Override
+    protected void onStartLoading() {
+        super.onStartLoading();
+        forceLoad();
+    }
+
+    public EarthquakeLoader(@NonNull Context context, String stringUrl) {
         super(context);
+        mSTringUrl = stringUrl;
     }
 
     @Nullable
     @Override
     public ArrayList<Earthquake> loadInBackground() {
-        ArrayList<Earthquake> earthquakes = QueryUtils.fetchEarthquakeData(EarthquakeActivity.USGS_REQUEST_URL);
+        ArrayList<Earthquake> earthquakes = QueryUtils.fetchEarthquakeData(mSTringUrl);
         return earthquakes;
     }
 }
