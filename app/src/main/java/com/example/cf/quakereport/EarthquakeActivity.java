@@ -45,12 +45,13 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
 
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-        if (cm != null && networkInfo.isConnected()) {
+        mLoadingIndicator = findViewById(R.id.loading_indicator);
+        //检查是否有网络连接
+        if (cm != null && networkInfo != null && networkInfo.isConnected()) {
             LoaderManager loaderManager = LoaderManager.getInstance(this);
             loaderManager.initLoader(0, null, this);
             Log.i(LOG_TAG, "initLoader() 方法被调用");
         } else {
-            mLoadingIndicator = findViewById(R.id.loading_indicator);
             mLoadingIndicator.setVisibility(View.GONE);
             mEmptyTextView.setText(getString(R.string.no_internet_connection));
         }
