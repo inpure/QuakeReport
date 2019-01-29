@@ -136,6 +136,7 @@ public final class QueryUtils {
      * 查询USGS数据集并返回{@link Earthquake}对象列表
      */
     public static ArrayList<Earthquake> fetchEarthquakeData(String requestUri) {
+        Log.i(LOG_TAG, "fetchEarthquakeData() 方法被调用");
         URL url = QueryUtils.createUrl(requestUri);
         String jsonResponse = "";
         try {

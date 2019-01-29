@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">QuakeReport</string>
+    <string name="no_earthquakes">没有找到地震列表</string>
+    <string name="no_internet_connection">无网络连接</string>
 </resources>

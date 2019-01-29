@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.AsyncTaskLoader;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -15,10 +16,12 @@ import java.util.ArrayList;
  */
 public class EarthquakeLoader extends AsyncTaskLoader<ArrayList<Earthquake>> {
     private String mStringUrl;
+    private static  final String LOG_TAG = EarthquakeAdapter.class.getName();
 
     @Override
     protected void onStartLoading() {
         super.onStartLoading();
+        Log.i(LOG_TAG, "onStartLoading() 方法被调用");
         forceLoad();
     }
 
@@ -30,6 +33,7 @@ public class EarthquakeLoader extends AsyncTaskLoader<ArrayList<Earthquake>> {
     @Nullable
     @Override
     public ArrayList<Earthquake> loadInBackground() {
+        Log.i(LOG_TAG, "loadInBackground() 方法被调用");
         ArrayList<Earthquake> earthquakes = QueryUtils.fetchEarthquakeData(mStringUrl);
         return earthquakes;
     }
